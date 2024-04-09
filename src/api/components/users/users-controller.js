@@ -52,13 +52,12 @@ async function createUser(request, response, next) {
     const password = request.body.password;
     const password_confirm = request.body.password_confirm;
 
-    if(password!== password_confirm) {
+    if (password !== password_confirm) {
       throw errorResponder(
         errorTypes.INVALID_PASSWORD,
-      'INVALID_PASSWORD_ERROR'
+        'INVALID_PASSWORD_ERROR'
       );
     }
-
 
     const emailSudahada = await usersService.isEmailTaken(email);
     if (emailSudahada) {
@@ -133,11 +132,30 @@ async function deleteUser(request, response, next) {
     return next(error);
   }
 }
+async function changePassword(request, response, next) {
+  try {
+    const userId = request.params.id;
+    const { oldPassword, newPassword, newPasswordConfirm } = request.body;
 
+    await usersService.changePassword(
+      userId,
+      oldPassword,
+      newPassword,
+      newPasswordConfirm
+    );
+
+    return response
+      .status(200)
+      .json({ message: 'Password changed successfully' });
+  } catch (error) {
+    return next(error);
+  }
+}
 module.exports = {
   getUsers,
   getUser,
   createUser,
   updateUser,
   deleteUser,
+  changePassword,
 };

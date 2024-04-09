@@ -1,5 +1,6 @@
 const usersRepository = require('./users-repository');
-const { hashPassword } = require('../../../utils/password');
+const { hashPassword, passwordMatched } = require('../../../utils/password');
+
 
 /**
  * Get list of users
@@ -69,7 +70,7 @@ async function createUser(name, email, password) {
  * @returns {boolean}
  */
 async function updateUser(id, name, email) {
-  const user = await usersRepository.getUser(id);
+  const user = await usersRepository. getUsers(id);
 
   // User not found
   if (!user) {
@@ -107,14 +108,12 @@ async function deleteUser(id) {
   return true;
 }
 
-async function isEmailTaken(email) {
-  return await usersRepository.isEmailTaken(email);
-}
+// In user-service.js
+
 
 async function isEmailTaken(email) {
   return await usersRepository.isEmailTaken(email);
 }
-
 async function changePassword(userId, oldPassword, newPassword, newPasswordConfirm) {
   const user = await usersRepository.getUser(userId);
   if (!user) {
@@ -147,3 +146,4 @@ module.exports = {
   isEmailTaken,
   changePassword,
 };
+
