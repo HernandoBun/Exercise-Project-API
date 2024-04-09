@@ -106,9 +106,38 @@ async function deleteUser(id) {
 
   return true;
 }
+
 async function isEmailTaken(email) {
   return await usersRepository.isEmailTaken(email);
 }
+
+async function isEmailTaken(email) {
+  return await usersRepository.isEmailTaken(email);
+}
+
+async function changePassword(userId, oldPassword, newPassword, newPasswordConfirm) {
+  const user = await usersRepository.getUser(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const PasswordMatched = await passwordMatched(oldPassword, user.password);
+  if (!PasswordMatched) {
+    throw new Error('Invalid old password');
+  }
+
+  if (newPassword !== newPasswordConfirm) {
+    throw new Error('New password and confirmation do not match');
+  }
+
+  if (newPassword.length < 6 || newPassword.length > 32) {
+    throw new Error('New password length must be between 6 and 32 characters');
+  }
+
+  const hashedNewPassword = await hashPassword(newPassword);
+  await usersRepository.updatePassword(userId, hashedNewPassword);
+}
+
 module.exports = {
   getUsers,
   getUser,
@@ -116,4 +145,5 @@ module.exports = {
   updateUser,
   deleteUser,
   isEmailTaken,
+  changePassword,
 };

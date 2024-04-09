@@ -52,7 +52,7 @@ async function createUser(request, response, next) {
     const password = request.body.password;
     const password_confirm = request.body.password_confirm;
 
-    if(password!=password_confirm) {
+    if(password!== password_confirm) {
       throw errorResponder(
         errorTypes.INVALID_PASSWORD,
       'INVALID_PASSWORD_ERROR'
