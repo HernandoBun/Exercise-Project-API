@@ -51,19 +51,19 @@ async function createUser(request, response, next) {
     const email = request.body.email;
     const password = request.body.password;
     const password_confirm = request.body.password_confirm;
-
-    if (password !== password_confirm) {
-      throw errorResponder(
-        errorTypes.INVALID_PASSWORD,
-        'INVALID_PASSWORD_ERROR'
-      );
-    }
-
+    
     const emailSudahada = await usersService.isEmailTaken(email);
     if (emailSudahada) {
       throw errorResponder(
         errorTypes.EMAIL_ALREADY_TAKEN,
         'Email already taken'
+      );
+    }
+
+    if (password !== password_confirm) {
+      throw errorResponder(
+        errorTypes.INVALID_PASSWORD,
+        'Password Confirmation Wrong'
       );
     }
 
@@ -137,12 +137,21 @@ async function changePassword(request, response, next) {
     const userId = request.params.id;
     const { oldPassword, newPassword, newPasswordConfirm } = request.body;
 
+    if (newPassword !== newPasswordConfirm) {
+      throw errorResponder(
+        errorTypes.INVALID_PASSWORD,
+        'Password Confirmation Wrong'
+      );
+    }
+
     await usersService.changePassword(
       userId,
       oldPassword,
       newPassword,
       newPasswordConfirm
     );
+
+    
 
     return response
       .status(200)
