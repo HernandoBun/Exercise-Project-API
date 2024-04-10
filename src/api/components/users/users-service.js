@@ -1,7 +1,6 @@
 const usersRepository = require('./users-repository');
 const { hashPassword, passwordMatched } = require('../../../utils/password');
 
-
 /**
  * Get list of users
  * @returns {Array}

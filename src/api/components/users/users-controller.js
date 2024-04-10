@@ -151,8 +151,6 @@ async function changePassword(request, response, next) {
       newPasswordConfirm
     );
 
-    
-
     return response
       .status(200)
       .json({ message: 'Password changed successfully' });
