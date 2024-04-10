@@ -126,7 +126,7 @@ async function changePassword(userId, oldPassword, newPassword, newPasswordConfi
   }
 
   if (newPassword !== newPasswordConfirm) {
-    throw new Error('New password and confirmation do not match');
+    throw new Error('New password and confirmation tidak sama');
   }
 
   if (newPassword.length < 6 || newPassword.length > 32) {
